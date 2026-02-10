@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dilan 🤍 Davut</title>
+
+<style>
+body {
+  margin: 0;
+  height: 100vh;
+  overflow: hidden;
+  font-family: Georgia, serif;
+  background:
+    radial-gradient(circle at top, rgba(255,182,193,0.45), transparent 60%),
+    radial-gradient(circle at bottom, rgba(139,69,19,0.45), transparent 60%),
+    linear-gradient(135deg, #5a3825, #f7a1c4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+}
+
+#start {
+  position: fixed;
+  inset: 0;
+  background: black;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10;
+  cursor: pointer;
+}
+
+.intro {
+  font-size: 2.3rem;
+  text-align: center;
+  animation: glow 2s infinite;
+}
+
+@keyframes glow {
+  0% { opacity: 0.4; }
+  50% { opacity: 1; }
+  100% { opacity: 0.4; }
+}
+
+#content {
+  display: none;
+  max-width: 92%;
+  text-align: center;
+  font-size: 1.45rem;
+  line-height: 2.2;
+}
+
+.fade {
+  animation: fadeText 4.5s ease-in-out;
+}
+
+@keyframes fadeText {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.float {
+  position: absolute;
+  font-size: 30px;
+  animation: floatUp 11s linear infinite;
+  pointer-events: none;
+}
+
+@keyframes floatUp {
+  0% { transform: translateY(110vh); opacity: 1; }
+  100% { transform: translateY(-15vh); opacity: 0; }
+}
+</style>
+</head>
+
+<body>
+
+<div id="start">
+  <div class="intro">
+    🎧 Sesini aç<br>
+    ve ekrana dokun
+  </div>
+</div>
+
+<audio id="music" loop>
+  <source src="seni-cok-seviyorum.mp3" type="audio/mpeg">
+</audio>
+
+<div id="content"></div>
+
+<script>
+const texts = [
+  "Dilan… 🤍<br><br>Bu satırların her biri kalbimin içinden sana geliyor.",
+  "Sen aklıma geldiğinde dünya yavaşlıyor 🌸",
+  "Gülüşün… her şeyi susturuyor 🤎",
+  "Seni sevmek her gün yeniden seçmek ✨",
+  "14 Şubat sadece bir gün ama sen her günümsün 💗",
+  "İyi ki varsın Dilan 🤍",
+  "Sevgililer Günümüz kutlu olsun<br><br><b>Davut</b>"
+];
+
+const symbols = ["💗","🤍","🤎","✨","🌸","🦋","💞","🕊️"];
+
+const start = document.getElementById("start");
+const music = document.getElementById("music");
+const content = document.getElementById("content");
+let i = 0;
+
+start.onclick = () => {
+  music.currentTime = 59;
+  music.play();
+
+  start.style.display = "none";
+  content.style.display = "block";
+  showText();
+  setInterval(createSymbol, 450);
+};
+
+function showText() {
+  if (i < texts.length) {
+    content.innerHTML = `<div class="fade">${texts[i]}</div>`;
+    i++;
+    setTimeout(showText, 7000);
+  }
+}
+
+function createSymbol() {
+  const el = document.createElement("div");
+  el.className = "float";
+  el.innerHTML = symbols[Math.floor(Math.random() * symbols.length)];
+  el.style.left = Math.random() * 100 + "vw";
+  document.body.appendChild(el);
+  setTimeout(() => el.remove(), 11000);
+}
+</script>
+
+</body>
+</html>
