@@ -134,7 +134,12 @@ function createSymbol() {
   document.body.appendChild(el);
   setTimeout(() => el.remove(), 11000);
 }
+<script>
+document.body.addEventListener("click", () => {
+  const music = document.getElementById("music");
+  music.currentTime = 59;
+  music.play();
+}, { once: true });
 </script>
-
 </body>
 </html>
