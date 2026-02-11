@@ -14,12 +14,12 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  background: #fce4ec;
-  color: #fff;
+  color: white;
   position: relative;
+  background: #fce4ec;
 }
 
-/* Arka plan için aşk emojileri */
+/* Arka plan aşk emojileri */
 body::before {
   content: "💖💌❤️✨🌸🕊️💞💗";
   position: absolute;
@@ -34,25 +34,46 @@ body::before {
   pointer-events: none;
 }
 
-/* Fotoğraf kutusu */
-#photoBox {
-  position: absolute;
-  top: 10%;
-  left: 50%;
-  transform: translateX(-50%);
-  max-width: 90%;
-  max-height: 70%;
-  border-radius: 20px;
-  overflow: hidden;
-  box-shadow: 0 0 20px rgba(0,0,0,0.5);
-  z-index: 1;
-  display: none;
+/* Tam ekran başlat butonu */
+#startScreen {
+  position: fixed;
+  inset: 0;
+  background: linear-gradient(135deg, #6b3e26, #f4b6c2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
 }
 
-#photoBox img {
+#startBtn {
+  font-size: 24px;
+  padding: 20px 30px;
+  border-radius: 16px;
+  border: none;
+  background: #fff;
+  color: #6b3e26;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+/* Fotoğraflar arka planda video gibi */
+#backgroundPhotos {
+  position: absolute;
+  top: 0;
+  left: 0;
   width: 100%;
-  height: auto;
-  display: block;
+  height: 100%;
+  overflow: hidden;
+  z-index: 0;
+}
+
+#backgroundPhotos img {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transition: opacity 2s ease-in-out;
 }
 
 /* Yazılar */
@@ -75,7 +96,7 @@ body::before {
   to { opacity: 1; transform: translateY(0); }
 }
 
-/* Sürpriz kutular */
+/* Sürpriz kutuları */
 .surpriseBox {
   position: relative;
   display: inline-block;
@@ -107,12 +128,18 @@ body::before {
 }
 </style>
 </head>
-
 <body>
 
-<!-- Fotoğraf kutusu -->
-<div id="photoBox">
-  <img id="photo" src="foto.1.jpg" alt="Sevgilim">
+<!-- Başlangıç Butonu -->
+<div id="startScreen">
+  <button id="startBtn">🔊 Sesini aç ve dokun</button>
+</div>
+
+<!-- Arka plan fotoğrafları -->
+<div id="backgroundPhotos">
+  <img src="foto.1.jpg" alt="">
+  <img src="foto.2.jpg" alt="">
+  <img src="foto.3.jpg" alt="">
 </div>
 
 <!-- Yazılar -->
@@ -134,6 +161,11 @@ body::before {
   </div>
 </div>
 
+<!-- Müzik -->
+<audio id="music" loop>
+  <source src="seni.cok-seviyorum.mp3" type="audio/mpeg">
+</audio>
+
 <script>
 document.addEventListener("DOMContentLoaded", () => {
   const texts = [
@@ -147,32 +179,46 @@ document.addEventListener("DOMContentLoaded", () => {
   ];
 
   const content = document.getElementById("content");
-  const photoBox = document.getElementById("photoBox");
-  const photo = document.getElementById("photo");
+  const btn = document.getElementById("startBtn");
+  const startScreen = document.getElementById("startScreen");
+  const music = document.getElementById("music");
 
-  let i = 0;
+  const photos = document.querySelectorAll("#backgroundPhotos img");
+  let currentPhoto = 0;
 
   function showText() {
-    if (i < texts.length) {
-      content.innerHTML = `<div class="fade">${texts[i]}</div>`;
-      i++;
-      setTimeout(showText, 7000);
+    let i = 0;
+    function nextText() {
+      if (i < texts.length) {
+        content.innerHTML = `<div class="fade">${texts[i]}</div>`;
+        i++;
+        setTimeout(nextText, 7000);
+      }
     }
+    nextText();
   }
 
-  // Fotoğrafları rastgele göster
-  const photos = ["foto.1.jpg", "foto.2.jpg", "foto.3.jpg"];
-  function showPhoto() {
-    photoBox.style.display = "block";
-    photo.src = photos[Math.floor(Math.random() * photos.length)];
-    setTimeout(() => {
-      photoBox.style.display = "none";
-      setTimeout(showPhoto, Math.random() * 5000 + 3000); // 3-8 saniye arası tekrar
-    }, 4000); // fotoğraf 4 saniye görünsün
+  function startSlideshow() {
+    photos.forEach((img, idx) => img.style.opacity = 0);
+    photos[currentPhoto].style.opacity = 1;
+
+    setInterval(() => {
+      photos[currentPhoto].style.opacity = 0;
+      currentPhoto = (currentPhoto + 1) % photos.length;
+      photos[currentPhoto].style.opacity = 1;
+    }, 5000); // her 5 saniyede fotoğraf değişiyor
   }
 
-  showText();
-  showPhoto();
+  btn.addEventListener("click", () => {
+    music.currentTime = 0;
+    music.play().then(() => {
+      startScreen.style.display = "none";
+      showText();
+      startSlideshow();
+    }).catch(err => {
+      alert("Ses başlatılamadı, lütfen sessiz modu kapatıp tekrar dokun.");
+    });
+  });
 
   // Sürpriz kutuları
   const boxes = document.querySelectorAll(".surpriseBox");
