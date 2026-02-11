@@ -19,7 +19,6 @@ body {
   background: #fce4ec;
 }
 
-/* Arka plan aşk emojileri */
 body::before {
   content: "💖💌❤️✨🌸🕊️💞💗";
   position: absolute;
@@ -34,7 +33,6 @@ body::before {
   pointer-events: none;
 }
 
-/* Başlangıç ekranı */
 #startScreen {
   position: fixed;
   inset: 0;
@@ -56,7 +54,6 @@ body::before {
   cursor: pointer;
 }
 
-/* Fotoğraflar */
 #backgroundPhotos {
   position: absolute;
   top: 0;
@@ -75,7 +72,6 @@ body::before {
   display: none;
 }
 
-/* Yazılar */
 #content {
   max-width: 90%;
   text-align: center;
@@ -86,7 +82,6 @@ body::before {
   display: none;
 }
 
-/* Fade animasyonu */
 .fade {
   animation: fadeText 4s ease-in-out;
 }
@@ -96,7 +91,6 @@ body::before {
   to { opacity: 1; transform: translateY(0); }
 }
 
-/* Sürpriz kutuları */
 .surpriseBox {
   position: relative;
   display: inline-block;
@@ -130,22 +124,18 @@ body::before {
 </head>
 <body>
 
-<!-- Başlangıç butonu -->
 <div id="startScreen">
   <button id="startBtn">🔊 Sesini aç ve dokun</button>
 </div>
 
-<!-- Arka plan fotoğrafları -->
 <div id="backgroundPhotos">
   <img src="foto.1.jpg" alt="">
   <img src="foto.2.jpg" alt="">
   <img src="foto.3.jpg" alt="">
 </div>
 
-<!-- Yazılar -->
 <div id="content"></div>
 
-<!-- Sürpriz kutuları -->
 <div id="surprises" style="position: relative; z-index:2; text-align:center;">
   <div class="surpriseBox">
     <button>🎁 Sürpriz 1</button>
@@ -161,7 +151,6 @@ body::before {
   </div>
 </div>
 
-<!-- Müzik -->
 <audio id="music" loop>
   <source src="seni.cok-seviyorum.mp3" type="audio/mpeg">
 </audio>
@@ -199,25 +188,28 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function startSlideshow() {
-    photos.forEach((img, idx) => img.style.display = "none");
+    photos.forEach(img => img.style.display = "none");
     photos[currentPhoto].style.display = "block";
 
     setInterval(() => {
       photos[currentPhoto].style.display = "none";
       currentPhoto = (currentPhoto + 1) % photos.length;
       photos[currentPhoto].style.display = "block";
-    }, 5000); // her 5 saniyede fotoğraf değişiyor
+    }, 5000);
   }
 
-  btn.addEventListener("click", () => {
-    music.play().then(() => {
-      startScreen.style.display = "none";
-      content.style.display = "block";
-      showText();
-      startSlideshow();
-    }).catch(err => {
-      alert("Ses başlatılamadı, lütfen sessiz modu kapatıp tekrar dokun.");
-    });
+  btn.addEventListener("click", async () => {
+    startScreen.style.display = "none";
+    content.style.display = "block";
+    showText();
+    startSlideshow();
+
+    try {
+      music.currentTime = 59;  // 59. saniyeden başlat
+      await music.play();
+    } catch (err) {
+      alert("Müzik çalınamadı, lütfen sessiz modu kapatıp tekrar dokun.");
+    }
   });
 
   // Sürpriz kutuları
