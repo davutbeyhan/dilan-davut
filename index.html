@@ -5,46 +5,65 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Dilan 🤍 Davut</title>
 
+<!-- Google Font -->
+<link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
+
 <style>
 body {
   margin: 0;
   height: 100vh;
   overflow: hidden;
-  font-family: Georgia, serif;
+  font-family: 'Dancing Script', cursive;
   background:
-    radial-gradient(circle at top, rgba(255,182,193,0.45), transparent 60%),
-    radial-gradient(circle at bottom, rgba(139,69,19,0.45), transparent 60%),
+    radial-gradient(circle at top, rgba(255,182,193,0.4), transparent 60%),
+    radial-gradient(circle at bottom, rgba(139,69,19,0.35), transparent 60%),
     linear-gradient(135deg, #5a3825, #f7a1c4);
   display: flex;
   justify-content: center;
   align-items: center;
   color: white;
+  position: relative;
 }
 
+/* Arka planda kayan kalpler */
+@keyframes heartMove {
+  0% { transform: translateY(110vh) rotate(0deg); opacity: 1; }
+  100% { transform: translateY(-20vh) rotate(360deg); opacity: 0; }
+}
+.heartBg {
+  position: absolute;
+  font-size: 50px;
+  animation: heartMove 15s linear infinite;
+  pointer-events: none;
+  opacity: 0.15;
+}
+
+/* İçerik */
 #content {
   display: none;
   max-width: 92%;
   text-align: center;
-  font-size: 1.45rem;
-  line-height: 2.2;
+  font-size: 1.6rem;
+  line-height: 2.4;
+  text-shadow: 0 0 15px rgba(255,192,203,0.7);
 }
 
+/* Yazı fade efekti */
 .fade {
   animation: fadeText 4.5s ease-in-out;
 }
-
 @keyframes fadeText {
   from { opacity: 0; transform: translateY(20px); }
   to { opacity: 1; transform: translateY(0); }
 }
 
+/* Uçan emojiler */
 .float {
   position: absolute;
   font-size: 30px;
   animation: floatUp 11s linear infinite;
   pointer-events: none;
 }
-
 @keyframes floatUp {
   0% { transform: translateY(110vh); opacity: 1; }
   100% { transform: translateY(-15vh); opacity: 0; }
@@ -60,7 +79,6 @@ body {
   justify-content: center;
   z-index: 9999;
 }
-
 #startBtn {
   font-size: 24px;
   padding: 20px 30px;
@@ -71,6 +89,21 @@ body {
   font-weight: bold;
   cursor: pointer;
 }
+
+/* Sürpriz kutu */
+.surprise {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  font-size: 30px;
+  padding: 15px;
+  border-radius: 50%;
+  border: none;
+  background: #ff5a5f;
+  color: white;
+  cursor: pointer;
+  z-index: 9999;
+}
 </style>
 </head>
 
@@ -78,9 +111,7 @@ body {
 
 <!-- TAM EKRAN BUTON -->
 <div id="startScreen">
-  <button id="startBtn">
-    🔊 Sesini aç ve dokun
-  </button>
+  <button id="startBtn">🔊 Sesini aç ve dokun</button>
 </div>
 
 <!-- Müzik -->
@@ -90,6 +121,9 @@ body {
 
 <!-- Yazılar -->
 <div id="content"></div>
+
+<!-- Sürpriz kutu -->
+<button class="surprise">🎁</button>
 
 <script>
 document.addEventListener("DOMContentLoaded", () => {
@@ -103,11 +137,12 @@ document.addEventListener("DOMContentLoaded", () => {
     "Sevgililer Günümüz kutlu olsun<br><br><b>Davut</b>"
   ];
 
-  const symbols = ["💗","🤍","🤎","✨","🌸","🦋","💞","🕊️"];
+  const symbols = ["💗","🤍","🤎","✨","🌸","💞"];
   const content = document.getElementById("content");
   const btn = document.getElementById("startBtn");
   const startScreen = document.getElementById("startScreen");
   const music = document.getElementById("music");
+  const surprise = document.querySelector('.surprise');
   let i = 0;
 
   function showText() {
@@ -127,16 +162,39 @@ document.addEventListener("DOMContentLoaded", () => {
     setTimeout(() => el.remove(), 11000);
   }
 
+  function createHeartBg() {
+    const heart = document.createElement("div");
+    heart.className = "heartBg";
+    const heartEmojis = ["💖","💘","💝","💞","💓"];
+    heart.innerHTML = heartEmojis[Math.floor(Math.random() * heartEmojis.length)];
+    heart.style.left = Math.random() * 100 + "vw";
+    document.body.appendChild(heart);
+    setTimeout(() => heart.remove(), 15000);
+  }
+
   btn.addEventListener("click", () => {
-    music.currentTime = 59;
     music.play().then(() => {
       startScreen.style.display = "none";
       content.style.display = "block";
       showText();
       setInterval(createSymbol, 450);
+      setInterval(createHeartBg, 600);
     }).catch(err => {
       alert("Ses başlatılamadı, lütfen sessiz modu kapatıp tekrar dokun.");
     });
+  });
+
+  // Sürpriz kutu
+  surprise.addEventListener("click", () => {
+    for(let j=0;j<100;j++){
+      const heart = document.createElement('div');
+      heart.className = 'float';
+      heart.innerHTML = '❤️';
+      heart.style.left = Math.random()*100 + 'vw';
+      heart.style.fontSize = (20 + Math.random()*30) + 'px';
+      document.body.appendChild(heart);
+      setTimeout(()=>heart.remove(),6000);
+    }
   });
 });
 </script>
