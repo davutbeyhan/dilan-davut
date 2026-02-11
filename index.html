@@ -148,7 +148,10 @@ document.addEventListener("DOMContentLoaded", () => {
     "Seni sevmek, her gün yeniden mucizeyi yaşamak gibi ✨💗",
     "Seninle geçirdiğim her an paha biçilemez 💕💖",
     "İyi ki varsın Sevgilim 🤍🌸",
-    "Sen benim her şeyimsin 💗💞"
+    "Sen benim her şeyimsin 💗💞",
+    "Seninle her saniye bir rüya gibi 🌹🌟",
+    "Kalbim sadece seninle tamam 💝✨",
+    "Her nefesimde seni daha çok seviyorum 💓💞"
   ];
 
   const symbols = ["💗","🤍","🤎","✨","🌸","💞"];
@@ -164,6 +167,14 @@ document.addEventListener("DOMContentLoaded", () => {
       content.innerHTML = `<div class="fade">${texts[i]}</div>`;
       i++;
       setTimeout(showText, 7000);
+    } else {
+      // En son final mesajı ekle
+      content.innerHTML = `
+        <div class="fade">
+          Sevgililer Günümüz Kutlu Olsun Sevgilim<br><br>
+          <span style="font-size:2.5rem; font-weight:bold;">SENİ ÇOK SEVEN SEVGİLİN</span>
+        </div>
+      `;
     }
   }
 
@@ -213,7 +224,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Sürpriz kutu
   surprise.addEventListener("click", () => {
-    // Ekranı kırmızı kalplerle doldur
+    // Tüm ekranda kırmızı kalpler uçuşuyor
     for(let j=0;j<300;j++){
       const heart = document.createElement('div');
       heart.className = 'float';
@@ -224,13 +235,6 @@ document.addEventListener("DOMContentLoaded", () => {
       document.body.appendChild(heart);
       setTimeout(()=>heart.remove(),6000);
     }
-    // Final romantik mesajları #content içinde göster
-    content.innerHTML = `
-      <div class="fade">
-        Sevgililer Günümüz Kutlu Olsun Sevgilim<br><br>
-        <span style="font-size:2.5rem; font-weight:bold;">SENİ ÇOK SEVEN SEVGİLİN</span>
-      </div>
-    `;
   });
 });
 </script>
