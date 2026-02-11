@@ -3,34 +3,71 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Dilan 🤍 Davut</title>
+<title>Sevgilim 🤍 Sürpriz</title>
 
 <style>
 body {
   margin: 0;
   height: 100vh;
-  overflow: hidden;
   font-family: Georgia, serif;
-  background:
-    radial-gradient(circle at top, rgba(255,182,193,0.45), transparent 60%),
-    radial-gradient(circle at bottom, rgba(139,69,19,0.45), transparent 60%),
-    linear-gradient(135deg, #5a3825, #f7a1c4);
+  overflow: hidden;
   display: flex;
   justify-content: center;
   align-items: center;
-  color: white;
+  background: #fce4ec;
+  color: #fff;
+  position: relative;
 }
 
-#content {
+/* Arka plan için aşk emojileri */
+body::before {
+  content: "💖💌❤️✨🌸🕊️💞💗";
+  position: absolute;
+  top: 0;
+  left: 0;
+  font-size: 3rem;
+  line-height: 5rem;
+  white-space: pre-wrap;
+  opacity: 0.08;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+/* Fotoğraf kutusu */
+#photoBox {
+  position: absolute;
+  top: 10%;
+  left: 50%;
+  transform: translateX(-50%);
+  max-width: 90%;
+  max-height: 70%;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 0 20px rgba(0,0,0,0.5);
+  z-index: 1;
   display: none;
-  max-width: 92%;
+}
+
+#photoBox img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* Yazılar */
+#content {
+  max-width: 90%;
   text-align: center;
   font-size: 1.45rem;
-  line-height: 2.2;
+  line-height: 2;
+  z-index: 2;
+  position: relative;
 }
 
+/* Fade animasyonu */
 .fade {
-  animation: fadeText 4.5s ease-in-out;
+  animation: fadeText 4s ease-in-out;
 }
 
 @keyframes fadeText {
@@ -38,76 +75,81 @@ body {
   to { opacity: 1; transform: translateY(0); }
 }
 
-.float {
-  position: absolute;
-  font-size: 30px;
-  animation: floatUp 11s linear infinite;
-  pointer-events: none;
+/* Sürpriz kutular */
+.surpriseBox {
+  position: relative;
+  display: inline-block;
+  margin: 20px;
 }
 
-@keyframes floatUp {
-  0% { transform: translateY(110vh); opacity: 1; }
-  100% { transform: translateY(-15vh); opacity: 0; }
-}
-
-/* TAM EKRAN BUTON */
-#startScreen {
-  position: fixed;
-  inset: 0;
-  background: linear-gradient(135deg, #6b3e26, #f4b6c2);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 9999;
-}
-
-#startBtn {
-  font-size: 24px;
-  padding: 20px 30px;
-  border-radius: 16px;
+.surpriseBox button {
+  padding: 15px 25px;
+  font-size: 1.2rem;
+  border-radius: 12px;
   border: none;
   background: #fff;
-  color: #6b3e26;
-  font-weight: bold;
+  color: #e91e63;
   cursor: pointer;
+  font-weight: bold;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+  transition: transform 0.2s;
+}
+
+.surpriseBox button:hover {
+  transform: scale(1.1);
+}
+
+.surpriseText {
+  display: none;
+  margin-top: 10px;
+  font-size: 1.2rem;
+  color: #ff4081;
 }
 </style>
 </head>
 
 <body>
 
-<!-- TAM EKRAN BUTON -->
-<div id="startScreen">
-  <button id="startBtn">
-    🔊 Sesini aç ve dokun
-  </button>
+<!-- Fotoğraf kutusu -->
+<div id="photoBox">
+  <img id="photo" src="foto.1.jpg" alt="Sevgilim">
 </div>
-
-<!-- Müzik -->
-<audio id="music" loop>
-  <source src="seni-cok-seviyorum.mp3" type="audio/mpeg">
-</audio>
 
 <!-- Yazılar -->
 <div id="content"></div>
 
+<!-- Sürpriz kutuları -->
+<div id="surprises" style="position: relative; z-index:2; text-align:center;">
+  <div class="surpriseBox">
+    <button>🎁 Sürpriz 1</button>
+    <div class="surpriseText">Seninle her gün bir masal gibi 💖</div>
+  </div>
+  <div class="surpriseBox">
+    <button>🎁 Sürpriz 2</button>
+    <div class="surpriseText">Sen benim kalbimin tek sahibi 💌</div>
+  </div>
+  <div class="surpriseBox">
+    <button>🎁 Sürpriz 3</button>
+    <div class="surpriseText">Aşkımız her zaman büyüsün ✨</div>
+  </div>
+</div>
+
 <script>
 document.addEventListener("DOMContentLoaded", () => {
   const texts = [
-    "Dilan… 🤍<br><br>Bu satırların her biri kalbimin içinden sana geliyor.",
+    "Sevgilim… 🤍<br><br>Bu satırların her biri kalbimin içinden sana geliyor.",
     "Sen aklıma geldiğinde dünya yavaşlıyor 🌸",
     "Gülüşün… her şeyi susturuyor 🤎",
     "Seni sevmek her gün yeniden seçmek ✨",
     "14 Şubat sadece bir gün ama sen her günümsün 💗",
-    "İyi ki varsın Dilan 🤍",
+    "İyi ki varsın Sevgilim 🤍",
     "Sevgililer Günümüz kutlu olsun<br><br><b>Davut</b>"
   ];
 
-  const symbols = ["💗","🤍","🤎","✨","🌸","🦋","💞","🕊️"];
   const content = document.getElementById("content");
-  const btn = document.getElementById("startBtn");
-  const startScreen = document.getElementById("startScreen");
-  const music = document.getElementById("music");
+  const photoBox = document.getElementById("photoBox");
+  const photo = document.getElementById("photo");
+
   let i = 0;
 
   function showText() {
@@ -118,24 +160,27 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  function createSymbol() {
-    const el = document.createElement("div");
-    el.className = "float";
-    el.innerHTML = symbols[Math.floor(Math.random() * symbols.length)];
-    el.style.left = Math.random() * 100 + "vw";
-    document.body.appendChild(el);
-    setTimeout(() => el.remove(), 11000);
+  // Fotoğrafları rastgele göster
+  const photos = ["foto.1.jpg", "foto.2.jpg", "foto.3.jpg"];
+  function showPhoto() {
+    photoBox.style.display = "block";
+    photo.src = photos[Math.floor(Math.random() * photos.length)];
+    setTimeout(() => {
+      photoBox.style.display = "none";
+      setTimeout(showPhoto, Math.random() * 5000 + 3000); // 3-8 saniye arası tekrar
+    }, 4000); // fotoğraf 4 saniye görünsün
   }
 
-  btn.addEventListener("click", () => {
-    music.currentTime = 59;
-    music.play().then(() => {
-      startScreen.style.display = "none";
-      content.style.display = "block";
-      showText();
-      setInterval(createSymbol, 450);
-    }).catch(err => {
-      alert("Ses başlatılamadı, lütfen sessiz modu kapatıp tekrar dokun.");
+  showText();
+  showPhoto();
+
+  // Sürpriz kutuları
+  const boxes = document.querySelectorAll(".surpriseBox");
+  boxes.forEach(box => {
+    const btn = box.querySelector("button");
+    const text = box.querySelector(".surpriseText");
+    btn.addEventListener("click", () => {
+      text.style.display = text.style.display === "block" ? "none" : "block";
     });
   });
 });
