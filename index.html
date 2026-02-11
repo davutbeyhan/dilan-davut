@@ -58,6 +58,8 @@ body {
   font-size: 1.6rem;
   line-height: 2.4;
   text-shadow: 0 0 15px rgba(255,192,203,0.7);
+  position: relative;
+  z-index: 5;
 }
 
 /* Yazı fade efekti */
@@ -116,27 +118,6 @@ body {
   cursor: pointer;
   z-index: 9999;
 }
-
-/* Büyük final yazısı */
-#finalMessage {
-  display: none;
-  position: fixed;
-  inset: 0;
-  background: rgba(255,0,0,0.9);
-  color: white;
-  font-size: 3rem;
-  text-align: center;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  z-index: 10000;
-  line-height: 3.5rem;
-}
-#finalMessage span {
-  font-size: 4rem;
-  font-weight: bold;
-}
 </style>
 </head>
 
@@ -158,12 +139,6 @@ body {
 <!-- Sürpriz kutu -->
 <button class="surprise">🎁</button>
 
-<!-- Büyük final mesajı -->
-<div id="finalMessage">
-  Sevgililer Günümüz Kutlu Olsun Sevgilim
-  <span>SENİ ÇOK SEVEN SEVGİLİN</span>
-</div>
-
 <script>
 document.addEventListener("DOMContentLoaded", () => {
   const texts = [
@@ -182,7 +157,6 @@ document.addEventListener("DOMContentLoaded", () => {
   const startScreen = document.getElementById("startScreen");
   const music = document.getElementById("music");
   const surprise = document.querySelector('.surprise');
-  const finalMessage = document.getElementById("finalMessage");
   let i = 0;
 
   function showText() {
@@ -239,7 +213,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Sürpriz kutu
   surprise.addEventListener("click", () => {
-    // Tüm ekran kırmızı kalplerle dolsun
+    // Ekranı kırmızı kalplerle doldur
     for(let j=0;j<300;j++){
       const heart = document.createElement('div');
       heart.className = 'float';
@@ -250,8 +224,13 @@ document.addEventListener("DOMContentLoaded", () => {
       document.body.appendChild(heart);
       setTimeout(()=>heart.remove(),6000);
     }
-    // Final mesajını göster
-    finalMessage.style.display = "flex";
+    // Final romantik mesajları #content içinde göster
+    content.innerHTML = `
+      <div class="fade">
+        Sevgililer Günümüz Kutlu Olsun Sevgilim<br><br>
+        <span style="font-size:2.5rem; font-weight:bold;">SENİ ÇOK SEVEN SEVGİLİN</span>
+      </div>
+    `;
   });
 });
 </script>
