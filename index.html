@@ -3,38 +3,61 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Sevgilim 🤍 Sürpriz</title>
+<title>Dilan 🤍 Davut</title>
+
 <style>
 body {
   margin: 0;
   height: 100vh;
-  font-family: Georgia, serif;
   overflow: hidden;
-  background: #fce4ec;
-  position: relative;
+  font-family: Georgia, serif;
+  background:
+    radial-gradient(circle at top, rgba(255,182,193,0.45), transparent 60%),
+    radial-gradient(circle at bottom, rgba(139,69,19,0.45), transparent 60%),
+    linear-gradient(135deg, #5a3825, #f7a1c4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
 }
 
-/* Arka plan aşk emojileri */
-body::before {
-  content: "💖💌❤️✨🌸🕊️💞💗";
+#content {
+  display: none;
+  max-width: 92%;
+  text-align: center;
+  font-size: 1.45rem;
+  line-height: 2.2;
+}
+
+.fade {
+  animation: fadeText 4.5s ease-in-out;
+}
+
+@keyframes fadeText {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.float {
   position: absolute;
-  top: 0; left: 0;
-  font-size: 3rem;
-  line-height: 5rem;
-  white-space: pre-wrap;
-  opacity: 0.08;
-  width: 100%; height: 100%;
+  font-size: 30px;
+  animation: floatUp 11s linear infinite;
   pointer-events: none;
 }
 
-/* Başlat ekranı */
+@keyframes floatUp {
+  0% { transform: translateY(110vh); opacity: 1; }
+  100% { transform: translateY(-15vh); opacity: 0; }
+}
+
+/* TAM EKRAN BUTON */
 #startScreen {
   position: fixed;
   inset: 0;
   background: linear-gradient(135deg, #6b3e26, #f4b6c2);
   display: flex;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
   z-index: 9999;
 }
 
@@ -48,158 +71,73 @@ body::before {
   font-weight: bold;
   cursor: pointer;
 }
-
-/* Fotoğraf */
-#photo {
-  position: absolute;
-  width: 90%;
-  max-width: 600px;
-  height: auto;
-  top: 15%;
-  left: 50%;
-  transform: translateX(-50%);
-  display: none;
-  border-radius: 16px;
-  box-shadow: 0 0 20px rgba(0,0,0,0.5);
-  z-index: 2;
-  opacity: 0;
-  transition: opacity 1s ease-in-out;
-}
-
-/* Yazı */
-#content {
-  z-index: 1;
-  display: none;
-  text-align: center;
-  font-size: 1.45rem;
-  line-height: 2;
-  margin-top: 60vh;
-  color: #000;
-}
-
-/* Sürpriz kutuları */
-.surpriseBox {
-  position: absolute;
-  display: inline-block;
-  text-align: center;
-}
-
-.surpriseBox button {
-  padding: 12px 18px;
-  background: #fff;
-  color: #e91e63;
-  border: none;
-  border-radius: 12px;
-  cursor: pointer;
-}
-
-.surpriseText {
-  display: none;
-  font-size: 1.2rem;
-  color: #ff4081;
-  margin-top: 6px;
-}
 </style>
 </head>
+
 <body>
 
+<!-- TAM EKRAN BUTON -->
 <div id="startScreen">
-  <button id="startBtn">🔊 Sesini aç ve dokun</button>
+  <button id="startBtn">
+    🔊 Sesini aç ve dokun
+  </button>
 </div>
 
-<img id="photo" src="" alt="">
-
-<div id="content"></div>
-
-<div id="surprises"></div>
-
+<!-- Müzik -->
 <audio id="music" loop>
-  <source src="seni.cok-seviyorum.mp3" type="audio/mpeg">
+  <source src="seni-cok-seviyorum.mp3" type="audio/mpeg">
 </audio>
+
+<!-- Yazılar -->
+<div id="content"></div>
 
 <script>
 document.addEventListener("DOMContentLoaded", () => {
-  const startBtn = document.getElementById("startBtn");
+  const texts = [
+    "Dilan… 🤍<br><br>Bu satırların her biri kalbimin içinden sana geliyor.",
+    "Sen aklıma geldiğinde dünya yavaşlıyor 🌸",
+    "Gülüşün… her şeyi susturuyor 🤎",
+    "Seni sevmek her gün yeniden seçmek ✨",
+    "14 Şubat sadece bir gün ama sen her günümsün 💗",
+    "İyi ki varsın Dilan 🤍",
+    "Sevgililer Günümüz kutlu olsun<br><br><b>Davut</b>"
+  ];
+
+  const symbols = ["💗","🤍","🤎","✨","🌸","🦋","💞","🕊️"];
+  const content = document.getElementById("content");
+  const btn = document.getElementById("startBtn");
   const startScreen = document.getElementById("startScreen");
   const music = document.getElementById("music");
-  const photoEl = document.getElementById("photo");
-  const contentEl = document.getElementById("content");
-  const surprisesDiv = document.getElementById("surprises");
-
-  const photoList = ["foto.1.jpg","foto.2.jpg","foto.3.jpg"];
-  const texts = [
-    "Sevgilim… 🤍 Bu satırlar kalbimin içinden.",
-    "Sen aklıma geldiğinde dünya yavaşlıyor 🌸",
-    "Gülüşün… her şeyi susturuyor 🤎"
-  ];
-
-  const surpriseTexts = [
-    "Seninle her gün bir masal gibi 💖",
-    "Sen benim kalbimin tek sahibi 💌",
-    "Aşkımız hep büyüsün ✨"
-  ];
-
-  let txtIndex = 0;
-
-  // Fotoğraf gösterme
-  function showRandomPhoto() {
-    const idx = Math.floor(Math.random()*photoList.length);
-    photoEl.src = photoList[idx];
-    photoEl.style.display = "block";
-    photoEl.style.opacity = "1";
-    setTimeout(() => photoEl.style.opacity = "0", 4000);
-    setTimeout(() => photoEl.style.display = "none", 5000);
-  }
-
-  // Sürpriz kutusu göster
-  function createSurprise() {
-    const x = Math.random()*80;
-    const y = Math.random()*60 + 10;
-    const box = document.createElement("div");
-    box.className = "surpriseBox";
-    box.style.left = x+"%";
-    box.style.top = y+"%";
-
-    const btn = document.createElement("button");
-    btn.textContent = "🎁";
-
-    const txt = document.createElement("div");
-    txt.className = "surpriseText";
-    txt.innerHTML = surpriseTexts[Math.floor(Math.random()*surpriseTexts.length)];
-
-    btn.onclick = () => {
-      txt.style.display = txt.style.display==="block"?"none":"block";
-    };
-
-    box.appendChild(btn);
-    box.appendChild(txt);
-    surprisesDiv.appendChild(box);
-
-    setTimeout(() => box.remove(), 10000);
-  }
+  let i = 0;
 
   function showText() {
-    contentEl.style.display = "block";
-    contentEl.innerHTML = texts[txtIndex % texts.length];
-    txtIndex++;
+    if (i < texts.length) {
+      content.innerHTML = `<div class="fade">${texts[i]}</div>`;
+      i++;
+      setTimeout(showText, 7000);
+    }
   }
 
-  startBtn.onclick = async () => {
-    startScreen.style.display = "none";
-    showText();
+  function createSymbol() {
+    const el = document.createElement("div");
+    el.className = "float";
+    el.innerHTML = symbols[Math.floor(Math.random() * symbols.length)];
+    el.style.left = Math.random() * 100 + "vw";
+    document.body.appendChild(el);
+    setTimeout(() => el.remove(), 11000);
+  }
 
-    // Müzik 59. saniyeden başlat
-    try {
-      music.currentTime = 59;
-      await music.play();
-    } catch(e) {
-      alert("Lütfen sessiz modu kapatıp tekrar dokun!");
-    }
-
-    setInterval(showRandomPhoto, 7000);   // belli aralıklarla foto
-    setInterval(createSurprise, 9000);    // sürpriz kutuları
-    setInterval(showText, 7000);          // yazı değişimi
-  };
+  btn.addEventListener("click", () => {
+    music.currentTime = 59;
+    music.play().then(() => {
+      startScreen.style.display = "none";
+      content.style.display = "block";
+      showText();
+      setInterval(createSymbol, 450);
+    }).catch(err => {
+      alert("Ses başlatılamadı, lütfen sessiz modu kapatıp tekrar dokun.");
+    });
+  });
 });
 </script>
 
