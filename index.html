@@ -116,6 +116,27 @@ body {
   cursor: pointer;
   z-index: 9999;
 }
+
+/* Büyük final yazısı */
+#finalMessage {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(255,0,0,0.9);
+  color: white;
+  font-size: 3rem;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 10000;
+  line-height: 3.5rem;
+}
+#finalMessage span {
+  font-size: 4rem;
+  font-weight: bold;
+}
 </style>
 </head>
 
@@ -137,16 +158,22 @@ body {
 <!-- Sürpriz kutu -->
 <button class="surprise">🎁</button>
 
+<!-- Büyük final mesajı -->
+<div id="finalMessage">
+  Sevgililer Günümüz Kutlu Olsun Sevgilim
+  <span>SENİ ÇOK SEVEN SEVGİLİN</span>
+</div>
+
 <script>
 document.addEventListener("DOMContentLoaded", () => {
   const texts = [
-    "Sevgilim… 🤍<br><br>Bu satırların her biri kalbimin içinden sana geliyor.",
-    "Sen aklıma geldiğinde dünya yavaşlıyor 🌸",
-    "Gülüşün… her şeyi susturuyor 🤎",
-    "Seni sevmek her gün yeniden seçmek ✨",
-    "14 Şubat sadece bir gün ama sen her günümsün 💗",
-    "İyi ki varsın Sevgilim 🤍",
-    "Sevgililer Günümüz kutlu olsun<br><br><b>Davut</b>"
+    "Sevgilim… 🤍<br><br>Kalbimin en derin yerinden sana sesleniyorum 💖",
+    "Sen yanımda olunca dünya daha güzel 🌸✨",
+    "Gülüşün… tüm karanlıkları aydınlatıyor 🤎💞",
+    "Seni sevmek, her gün yeniden mucizeyi yaşamak gibi ✨💗",
+    "Seninle geçirdiğim her an paha biçilemez 💕💖",
+    "İyi ki varsın Sevgilim 🤍🌸",
+    "Sen benim her şeyimsin 💗💞"
   ];
 
   const symbols = ["💗","🤍","🤎","✨","🌸","💞"];
@@ -155,6 +182,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const startScreen = document.getElementById("startScreen");
   const music = document.getElementById("music");
   const surprise = document.querySelector('.surprise');
+  const finalMessage = document.getElementById("finalMessage");
   let i = 0;
 
   function showText() {
@@ -211,15 +239,19 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Sürpriz kutu
   surprise.addEventListener("click", () => {
-    for(let j=0;j<100;j++){
+    // Tüm ekran kırmızı kalplerle dolsun
+    for(let j=0;j<300;j++){
       const heart = document.createElement('div');
       heart.className = 'float';
       heart.innerHTML = '❤️';
       heart.style.left = Math.random()*100 + 'vw';
-      heart.style.fontSize = (20 + Math.random()*30) + 'px';
+      heart.style.top = Math.random()*100 + 'vh';
+      heart.style.fontSize = (20 + Math.random()*40) + 'px';
       document.body.appendChild(heart);
       setTimeout(()=>heart.remove(),6000);
     }
+    // Final mesajını göster
+    finalMessage.style.display = "flex";
   });
 });
 </script>
