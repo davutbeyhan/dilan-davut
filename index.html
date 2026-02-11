@@ -34,7 +34,7 @@ body::before {
   pointer-events: none;
 }
 
-/* Tam ekran başlat butonu */
+/* Başlangıç ekranı */
 #startScreen {
   position: fixed;
   inset: 0;
@@ -56,7 +56,7 @@ body::before {
   cursor: pointer;
 }
 
-/* Fotoğraflar arka planda video gibi */
+/* Fotoğraflar */
 #backgroundPhotos {
   position: absolute;
   top: 0;
@@ -72,8 +72,7 @@ body::before {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  opacity: 0;
-  transition: opacity 2s ease-in-out;
+  display: none;
 }
 
 /* Yazılar */
@@ -84,6 +83,7 @@ body::before {
   line-height: 2;
   z-index: 2;
   position: relative;
+  display: none;
 }
 
 /* Fade animasyonu */
@@ -130,7 +130,7 @@ body::before {
 </head>
 <body>
 
-<!-- Başlangıç Butonu -->
+<!-- Başlangıç butonu -->
 <div id="startScreen">
   <button id="startBtn">🔊 Sesini aç ve dokun</button>
 </div>
@@ -199,20 +199,20 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function startSlideshow() {
-    photos.forEach((img, idx) => img.style.opacity = 0);
-    photos[currentPhoto].style.opacity = 1;
+    photos.forEach((img, idx) => img.style.display = "none");
+    photos[currentPhoto].style.display = "block";
 
     setInterval(() => {
-      photos[currentPhoto].style.opacity = 0;
+      photos[currentPhoto].style.display = "none";
       currentPhoto = (currentPhoto + 1) % photos.length;
-      photos[currentPhoto].style.opacity = 1;
+      photos[currentPhoto].style.display = "block";
     }, 5000); // her 5 saniyede fotoğraf değişiyor
   }
 
   btn.addEventListener("click", () => {
-    music.currentTime = 0;
     music.play().then(() => {
       startScreen.style.display = "none";
+      content.style.display = "block";
       showText();
       startSlideshow();
     }).catch(err => {
