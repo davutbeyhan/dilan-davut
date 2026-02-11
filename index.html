@@ -83,6 +83,12 @@ body {
   100% { transform: translateY(-15vh); opacity: 0; }
 }
 
+/* Parıltılı ışık efekti için */
+@keyframes sparkle {
+  0%, 100% { text-shadow: 0 0 5px #fff, 0 0 10px #f0f, 0 0 15px #ff0; }
+  50% { text-shadow: 0 0 15px #fff, 0 0 25px #f0f, 0 0 35px #ff0; }
+}
+
 /* TAM EKRAN BUTON */
 #startScreen {
   position: fixed;
@@ -120,7 +126,6 @@ body {
 }
 </style>
 </head>
-
 <body>
 
 <!-- TAM EKRAN BUTON -->
@@ -142,7 +147,7 @@ body {
 <script>
 document.addEventListener("DOMContentLoaded", () => {
   const texts = [
-    "Sevgilim… 🤍<br><br>Kalbimin en derin yerinden sana sesleniyorum 💖",
+    "Sevgilim… 🤍<br>Kalbimin en derin yerinden sana sesleniyorum 💖",
     "Sen yanımda olunca dünya daha güzel 🌸✨",
     "Gülüşün… tüm karanlıkları aydınlatıyor 🤎💞",
     "Seni sevmek, her gün yeniden mucizeyi yaşamak gibi ✨💗",
@@ -154,12 +159,15 @@ document.addEventListener("DOMContentLoaded", () => {
     "Her nefesimde seni daha çok seviyorum 💓💞"
   ];
 
+  const finalText = "Sevgililer Günümüz Kutlu Olsun Sevgilim 💖 Seni çok seviyorum";
+
   const symbols = ["💗","🤍","🤎","✨","🌸","💞"];
   const content = document.getElementById("content");
   const btn = document.getElementById("startBtn");
   const startScreen = document.getElementById("startScreen");
   const music = document.getElementById("music");
   const surprise = document.querySelector('.surprise');
+
   let i = 0;
 
   function showText() {
@@ -168,13 +176,9 @@ document.addEventListener("DOMContentLoaded", () => {
       i++;
       setTimeout(showText, 7000);
     } else {
-      // En son final mesajı ekle
-      content.innerHTML = `
-        <div class="fade">
-          Sevgililer Günümüz Kutlu Olsun Sevgilim<br><br>
-          <span style="font-size:2.5rem; font-weight:bold;">SENİ ÇOK SEVEN SEVGİLİN</span>
-        </div>
-      `;
+      // Final yazı ve kırmızı kalpler patlaması
+      content.innerHTML = `<div class="fade" style="animation: fadeText 4s ease-in-out, sparkle 1s infinite;">${finalText}</div>`;
+      createRedHearts(200);
     }
   }
 
@@ -209,6 +213,19 @@ document.addEventListener("DOMContentLoaded", () => {
     setTimeout(()=>heart.remove(),10000);
   }
 
+  function createRedHearts(count){
+    for(let j=0;j<count;j++){
+      const heart = document.createElement('div');
+      heart.className='float';
+      heart.innerHTML='❤️';
+      heart.style.left=Math.random()*100+'vw';
+      heart.style.top=Math.random()*100+'vh';
+      heart.style.fontSize=(20+Math.random()*40)+'px';
+      document.body.appendChild(heart);
+      setTimeout(()=>heart.remove(),7000);
+    }
+  }
+
   btn.addEventListener("click", () => {
     music.play().then(() => {
       startScreen.style.display = "none";
@@ -222,22 +239,12 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
-  // Sürpriz kutu
+  // Sürpriz kutu sadece kırmızı kalpler fırlatsın, final yazısı çıkmasın
   surprise.addEventListener("click", () => {
-    // Tüm ekranda kırmızı kalpler uçuşuyor
-    for(let j=0;j<300;j++){
-      const heart = document.createElement('div');
-      heart.className = 'float';
-      heart.innerHTML = '❤️';
-      heart.style.left = Math.random()*100 + 'vw';
-      heart.style.top = Math.random()*100 + 'vh';
-      heart.style.fontSize = (20 + Math.random()*40) + 'px';
-      document.body.appendChild(heart);
-      setTimeout(()=>heart.remove(),6000);
-    }
+    createRedHearts(300);
   });
+
 });
 </script>
-
 </body>
 </html>
